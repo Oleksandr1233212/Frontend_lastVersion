@@ -11,9 +11,9 @@ import TaskList from './components/TaskList.vue'
   
   </header>
 
-  <main>
+  <body>
     <TaskList />
-  </main>
+  </body>
 </template>
 
 <style scoped>
@@ -21,13 +21,9 @@ import TaskList from './components/TaskList.vue'
 
 
 
-main {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  height: 100vh; 
-  left: 10000px;
+body {
+  position: absolute;
+  top: 0px; left: 570px;
   
 }
 
