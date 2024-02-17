@@ -4,7 +4,7 @@
       <h1 style="white-space: nowrap;">Таск Менеджер</h1>
     </div>
     <div class="mb-3">
-      <input v-model="newTask" type="text" class="form-control" placeholder="Введіть назву нової задачі...">
+      <input v-model="newTask" @keyup.enter="addTask" type="text" class="form-control" placeholder="Введіть назву нової задачі...">
       <button @click="addTask" class="btn btn-primary ml-2" style="white-space: nowrap;">Добавити задачу</button>
     </div>
     <ul class="list-group">
