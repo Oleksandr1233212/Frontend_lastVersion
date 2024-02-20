@@ -11,7 +11,7 @@
               <h5 class="modal-title">{{ showEditModal ? 'Редагувати задачу' : 'Нова задача' }}</h5>
               <button type="button" class="btn-close" @click="closeModals"></button>
             </div>
-            <div class="modal-body">
+            <div class="modal-body" >
               <input v-model="currentTask" type="text" class="form-control">
             </div>
             <div class="modal-footer">

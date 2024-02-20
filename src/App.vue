@@ -1,8 +1,9 @@
 <script setup>
 // import HelloWorld from './components/HelloWorld.vue'
 // import TheWelcome from './components/TheWelcome.vue'
-// import TaskList from './components/TaskList.vue'
-import TSList from './components/TSList.vue'
+import TaskList from './components/TaskList.vue'
+//import TaskList from './components/TSList.vue'
+
 </script>
 
 <template>
@@ -15,7 +16,7 @@ import TSList from './components/TSList.vue'
   
 
   <body>
-    <TSList />
+    <TaskList />
     
   </body>
 </template>
