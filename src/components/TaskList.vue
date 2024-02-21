@@ -14,12 +14,12 @@
 
             <i class="fas" :class="task.icon"></i> {{ task.name }}
           </span>
-          <input v-else v-model="task.name" @keyup.enter="finishEdit(task)" type="text" class="form-control" placeholder="Оновіть назву задачі...">
+      
         </div>
         <div>
-          <button v-if="!task.editing" @click="editTask(task, index)" class="btn btn-primary btn-sm"> Update </button>
-          <button v-else @click="finishEdit(task)" class="btn btn-success btn-sm"> Save </button>
-          <button @click="removeTask(index)" class="btn btn-danger btn-sm"> Delete </button>
+          <button v-if="!task.editing" @click="editTask(task, index)" class="btn btn-primary btn-sm"> Редагувати </button>
+
+          <button @click="confirmDelete(index)" class="btn btn-danger btn-sm"> Видалити </button>
         </div>
       </li>
     </ul>
@@ -35,7 +35,7 @@
               <input v-model='newTask' @keyup.enter="addTask" type="text" class="form-control">
             </div>
             <div class="modal-body" v-if="showEditModal">
-              <input v-model="currentTask.name" @keyup.enter="finishEdit" type="text" class="form-control">
+              <input v-model="editedTaskName" @keyup.enter="finishEdit" type="text" class="form-control">
             </div>
             <div class="modal-footer" v-if="showAddModal">
               <button type="button" class="btn btn-secondary" @click="closeModals">Закрити</button>
@@ -44,6 +44,22 @@
             <div class="modal-footer" v-if="showEditModal">
               <button type="button" class="btn btn-secondary" @click="closeModals">Закрити</button>
               <button type="button" class="btn btn-primary" @click="finishEdit">Зберегти</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div v-if="showConfirmModal" class="modal" style="display:block;" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title">Підтвердіть видалення</h5>
+            </div>
+            <div class="modal-body">
+              <p>Ви дійсно хочете видалити цю задачу?</p>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" @click="closeModals">Ні</button>
+              <button type="button" class="btn btn-danger" @click="deleteTask">Так</button>
             </div>
           </div>
         </div>
@@ -82,19 +98,26 @@ export default {
         this.currentTask='';
         this.currentTaskIndex = null;
       },
-    removeTask(index) {
-      this.tasks.splice(index, 1);
-    },
+      confirmDelete(index) {
+        this.showConfirmModal = true;
+        this.currentTaskIndex = index;
+      },
+      deleteTask() {
+        this.tasks.splice(this.currentTaskIndex, 1);
+        this.closeModals();
+      },
     editTask(task, index) {
-      this.currentTask = task ; 
+      this.editedTaskName = task.name;
+      this.currentTask = task;
       this.currentTaskIndex = index;
       this.showEditModal = true;
     },
     finishEdit() {
       if (this.currentTask) {
-        
-        this.tasks[this.currentTaskIndex] = { ...this.currentTask, editing: false };
-        this.closeModals()
+
+        this.tasks[this.currentTaskIndex].name = this.editedTaskName;
+        this.tasks[this.currentTaskIndex].editing = false;
+        this.closeModals();
       }
     }
   },
@@ -123,5 +146,26 @@ export default {
   padding-right: 100px;
   margin: auto;
 }
-
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .modal-dialog {
+    width: 100%;
+    max-width: 500px;
+  }
+  
+  .modal-content {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 5px;
+  }
 </style>
