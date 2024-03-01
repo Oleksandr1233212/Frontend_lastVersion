@@ -77,8 +77,16 @@ export default {
       showEditModal: false,
       showConfirmModal: false,
       currentTask: null,
-      currentTaskIndex: null
+      currentTaskIndex: null,
+      editedTaskName: ''
     };
+  },
+  mounted() {
+
+    const savedTasks = localStorage.getItem('tasks');
+    if (savedTasks) {
+      this.tasks = JSON.parse(savedTasks);
+    }
   },
   methods: {
     addTask() {
@@ -88,8 +96,10 @@ export default {
         this.tasks.push({ id: this.tasks.length + 1, name: this.newTask, icon: defaultIcon, editing: false });
         this.newTask = '';
         this.showAddModal=false;
+        localStorage.setItem('tasks', JSON.stringify(this.tasks));
       }
     },
+    
     closeModals() {
         this.showAddModal = false;
         this.showEditModal = false;
@@ -105,6 +115,7 @@ export default {
       deleteTask() {
         this.tasks.splice(this.currentTaskIndex, 1);
         this.closeModals();
+        localStorage.setItem('tasks', JSON.stringify(this.tasks));
       },
     editTask(task, index) {
       this.editedTaskName = task.name;
@@ -118,10 +129,13 @@ export default {
         this.tasks[this.currentTaskIndex].name = this.editedTaskName;
         this.tasks[this.currentTaskIndex].editing = false;
         this.closeModals();
+        localStorage.setItem('tasks', JSON.stringify(this.tasks));
       }
     }
   },
+  
 };
+
 </script>
 
 <style scoped>
