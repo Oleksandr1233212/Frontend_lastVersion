@@ -8,7 +8,7 @@
       <button @click="showAddModal=true" class="btn btn-primary ml-2" style="white-space: nowrap;">Добавити задачу</button>
     </div>
     <ul class="list-group">
-      <li v-for="(task, index) in tasks" :key="task.id" class="list-group-item d-flex justify-content-between align-items-center">
+      <li v-for="(task, index) in tasks" :key="task.id" class="list-group-item d-flex justify-content-between align-items-center" style="width: 400px;">
         <div>
           <span v-if="!task.editing">
 
@@ -17,7 +17,7 @@
       
         </div>
         <div>
-          <button v-if="!task.editing" @click="editTask(task, index)" class="btn btn-primary btn-sm"> Редагувати </button>
+          <button v-if="!task.editing" @click="editTask(task, index)" class="btn btn-primary btn-sm" style="margin-right: 10px;"> Редагувати </button>
 
           <button @click="confirmDelete(index)" class="btn btn-danger btn-sm"> Видалити </button>
         </div>
@@ -81,15 +81,18 @@ export default {
       editedTaskName: ''
     };
   },
-  mounted() {
+  async mounted() {
 
-    const savedTasks = localStorage.getItem('tasks');
-    if (savedTasks) {
+    // const savedTasks = localStorage.getItem('tasks');
+    const response=await fetch('http://localhost:3001/');
+    const savedTasks = await response.json();
+    if (savedTask) {
       this.tasks = JSON.parse(savedTasks);
     }
+    
   },
   methods: {
-    addTask() {
+    async addTask() {
       if (this.newTask.trim() !== '') {
       
         const defaultIcon = 'fa-check-circle'; 
@@ -112,10 +115,11 @@ export default {
         this.showConfirmModal = true;
         this.currentTaskIndex = index;
       },
-      deleteTask() {
+      async deleteTask() {
         this.tasks.splice(this.currentTaskIndex, 1);
         this.closeModals();
         localStorage.setItem('tasks', JSON.stringify(this.tasks));
+        
       },
     editTask(task, index) {
       this.editedTaskName = task.name;
@@ -123,7 +127,7 @@ export default {
       this.currentTaskIndex = index;
       this.showEditModal = true;
     },
-    finishEdit() {
+    async finishEdit() {
       if (this.currentTask) {
 
         this.tasks[this.currentTaskIndex].name = this.editedTaskName;
@@ -139,7 +143,9 @@ export default {
 </script>
 
 <style scoped>
-
+.list-group-item .d-flex .justify-content-between .align-items-center {
+  width: 400px;
+}
 .d-flex {
   display: flex;
   align-items: center;
