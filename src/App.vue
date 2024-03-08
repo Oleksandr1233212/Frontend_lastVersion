@@ -31,7 +31,7 @@ import TaskList from './components/TaskList.vue'
 
 body {
   position: absolute;
-  top: 0px; left: 570px;
+  top: 200px; left: 300px;
   
 }
 

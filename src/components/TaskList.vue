@@ -1,13 +1,25 @@
 <template>
-  <div class="container py-5">
-    <div class="mb-3">
-      <h1 style="white-space: nowrap;">Таск Менеджер</h1>
-    </div>
-    <div class="mb-3">
+  <div class="container mt-5">
+        <div class="row justify-content-center" style="width: 700px">
+            <div class="col-md-6">
+                <h2 class="mb-4 text-center">Таск Менеджер</h2>
+                <form id="taskForm" @submit.prevent="addTask">
       
-      <button @click="showAddModal=true" class="btn btn-primary ml-2" style="white-space: nowrap;">Добавити задачу</button>
+                  <div class="form-group">
+    <div class="row">
+        <div class="col-sm-8">
+          <input type="text" v-model="newTask"  class="form-control" placeholder="Введіть назву завдання">
+        </div>
+        <div class="col-sm-4">
+          <button type="button" class="btn btn-primary btn-block" @click="addTask" style="white-space: nowrap;">Додати</button>
+        </div>
     </div>
-    <ul class="list-group">
+</div>
+                    
+                </form>
+            </div>
+            </div>
+    <ul class="list-group mt-3" id="list">
       <li v-for="(task, index) in tasks" :key="task.id" class="list-group-item d-flex justify-content-between align-items-center" style="width: 400px;">
         <div>
           <span v-if="!task.editing">
@@ -24,23 +36,18 @@
       </li>
     </ul>
   </div>
-  <div v-if="showAddModal || showEditModal" class="modal" style="display:block;" aria-hidden="true">
+  <div v-if="showEditModal" class="modal" style="display:block;" aria-hidden="true">
         <div class="modal-dialog">
           <div class="modal-content">
             <div class="modal-header">
-              <h5 class="modal-title">{{ showEditModal ? 'Редагувати задачу' : 'Нова задача' }}</h5>
+              <h5 class="modal-title">Редагувати задачу</h5>
               <button type="button" class="btn-close" @click="closeModals"></button>
             </div>
-            <div class="modal-body" v-if="showAddModal">
-              <input v-model='newTask' @keyup.enter="addTask" type="text" class="form-control">
-            </div>
+          
             <div class="modal-body" v-if="showEditModal">
               <input v-model="editedTaskName" @keyup.enter="finishEdit" type="text" class="form-control">
             </div>
-            <div class="modal-footer" v-if="showAddModal">
-              <button type="button" class="btn btn-secondary" @click="closeModals">Закрити</button>
-              <button type="button" class="btn btn-primary" @click="addTask">Зберегти</button>
-            </div>
+         
             <div class="modal-footer" v-if="showEditModal">
               <button type="button" class="btn btn-secondary" @click="closeModals">Закрити</button>
               <button type="button" class="btn btn-primary" @click="finishEdit">Зберегти</button>
@@ -73,7 +80,7 @@ export default {
     return {
       newTask: '',
       tasks: [],
-      showAddModal: false,
+      
       showEditModal: false,
       showConfirmModal: false,
       currentTask: null,
@@ -83,16 +90,16 @@ export default {
   },
   async mounted() {
 
-    // const savedTasks = localStorage.getItem('tasks');
-    const response=await fetch('http://localhost:3001/');
-    const savedTasks = await response.json();
-    if (savedTask) {
+     const savedTasks = localStorage.getItem('tasks');
+    // const response=await fetch('http://localhost:3001/');
+    //const savedTasks = await response.json();
+    if (savedTasks) {
       this.tasks = JSON.parse(savedTasks);
     }
     
   },
   methods: {
-    async addTask() {
+    addTask() {
       if (this.newTask.trim() !== '') {
       
         const defaultIcon = 'fa-check-circle'; 
@@ -104,7 +111,7 @@ export default {
     },
     
     closeModals() {
-        this.showAddModal = false;
+        
         this.showEditModal = false;
         this.showConfirmModal = false;
         this.newTask = '';
@@ -187,5 +194,11 @@ export default {
     background-color: #fff;
     padding: 20px;
     border-radius: 5px;
+  }
+  #list{
+    position: absolute;
+    left: 222px;
+
+
   }
 </style>
