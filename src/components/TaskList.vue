@@ -24,14 +24,16 @@
         <div>
           <span v-if="!task.editing">
 
-            <i class="fas" :class="task.icon"></i> {{ task.name }}
+            <i class="fas" :class="task.icon"></i> {{ task.title }} 
+            <i class="fas" :class="task.icon"></i> {{ task.id }}
           </span>
+          
       
         </div>
         <div>
-          <button v-if="!task.editing" @click="editTask(task, index)" class="btn btn-primary btn-sm" style="margin-right: 10px;"> Редагувати </button>
+          <button v-if="!task.editing" @click="editTask(task, task.id)" class="btn btn-primary btn-sm" style="margin-right: 10px;"> Редагувати </button>
 
-          <button @click="confirmDelete(index)" class="btn btn-danger btn-sm"> Видалити </button>
+          <button @click="confirmDelete(task.id)" class="btn btn-danger btn-sm"> Видалити </button>
         </div>
       </li>
     </ul>
@@ -66,7 +68,7 @@
             </div>
             <div class="modal-footer">
               <button type="button" class="btn btn-secondary" @click="closeModals">Ні</button>
-              <button type="button" class="btn btn-danger" @click="deleteTask">Так</button>
+              <button type="button" class="btn btn-danger" @click="deleteTask" >Так</button>
             </div>
           </div>
         </div>
@@ -74,6 +76,7 @@
 </template>
 
 <script>
+const API_URL = "http://localhost:5031/";
 export default {
   name: 'TaskManager',
   data() {
@@ -88,25 +91,38 @@ export default {
       editedTaskName: ''
     };
   },
-  async mounted() {
+  mounted() {
 
-     const savedTasks = localStorage.getItem('tasks');
-    // const response=await fetch('http://localhost:3001/');
-    //const savedTasks = await response.json();
-    if (savedTasks) {
-      this.tasks = JSON.parse(savedTasks);
-    }
+    
+    this.refreshData();
+  
     
   },
   methods: {
-    addTask() {
+    async refreshData(){
+      axios.get(API_URL+"api/tasknanagerapp/get").then(
+        (response)=>{
+          this.tasks=response.data
+        }
+      )
+    },
+    async addTask() {
       if (this.newTask.trim() !== '') {
+        let newData = this.tasks.value;
+        const formData = new FormData()
+        formData.append('newData', newData);
+        axios.post(API_URL+"api/tasknanagerapp/del?id="+id, formData).then(
+          (response)=>{
+            this.refreshData();
+            alert(response.data);
+          }
+        );
       
         const defaultIcon = 'fa-check-circle'; 
         this.tasks.push({ id: this.tasks.length + 1, name: this.newTask, icon: defaultIcon, editing: false });
         this.newTask = '';
         this.showAddModal=false;
-        localStorage.setItem('tasks', JSON.stringify(this.tasks));
+        
       }
     },
     
@@ -121,15 +137,27 @@ export default {
       confirmDelete(index) {
         this.showConfirmModal = true;
         this.currentTaskIndex = index;
+        
       },
       async deleteTask() {
-        this.tasks.splice(this.currentTaskIndex, 1);
+        //this.tasks.splice(this.currentTaskIndex, 1);
+        //alert(this.currentTaskIndex);
+        
+        let newData=this.tasks.title;
+        const formData=new FormData();
+        formData.append('newData', newData);
+        //alert(API_URL+"api/tasknanagerapp/del?id="+this.currentTaskIndex, formData)
+        axios.post(API_URL+"api/tasknanagerapp/del?id="+this.currentTaskIndex, formData).then(
+          (response)=>{
+            this.refreshData();
+            alert(response.data);
+          }
+        );
         this.closeModals();
-        localStorage.setItem('tasks', JSON.stringify(this.tasks));
         
       },
     editTask(task, index) {
-      this.editedTaskName = task.name;
+      this.editedTaskName = task.title;
       this.currentTask = task;
       this.currentTaskIndex = index;
       this.showEditModal = true;
@@ -137,7 +165,7 @@ export default {
     async finishEdit() {
       if (this.currentTask) {
 
-        this.tasks[this.currentTaskIndex].name = this.editedTaskName;
+        this.tasks[this.currentTaskIndex].title = this.editedTaskName;
         this.tasks[this.currentTaskIndex].editing = false;
         this.closeModals();
         localStorage.setItem('tasks', JSON.stringify(this.tasks));
