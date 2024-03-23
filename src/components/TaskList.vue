@@ -20,18 +20,18 @@
             </div>
             </div>
     <ul class="list-group mt-3" id="list">
-      <li v-for="(task, index) in tasks" :key="task.id" class="list-group-item d-flex justify-content-between align-items-center" style="width: 400px;">
+      <li v-for="(task, index) in tasks" :key="index" class="list-group-item d-flex justify-content-between align-items-center" style="width: 400px;">
         <div>
-          <span v-if="!task.editing">
+          <span>
 
-            <i class="fas" :class="task.icon"></i> {{ task.title }} 
-            <i class="fas" :class="task.icon"></i> {{ task.id }}
+            <i class="fas" ></i> {{ tasks[index] }} 
+            <i class="fas" ></i> {{ tasks[index] }}
           </span>
           
       
         </div>
         <div>
-          <button v-if="!task.editing" @click="editTask(task, task.id)" class="btn btn-primary btn-sm" style="margin-right: 10px;"> Редагувати </button>
+          <button  @click="editTask(task, task.id)" class="btn btn-primary btn-sm" style="margin-right: 10px;"> Редагувати </button>
 
           <button @click="confirmDelete(task.id)" class="btn btn-danger btn-sm"> Видалити </button>
         </div>
@@ -95,6 +95,7 @@ export default {
 
     
     this.refreshData();
+    
   
     
   },
@@ -102,9 +103,18 @@ export default {
     async refreshData(){
       axios.get(API_URL+"api/tasknanagerapp/get").then(
         (response)=>{
-          this.tasks=response.data
+          response.data.forEach((element) => {
+            if(!this.tasks[element.id]){
+              this.tasks[element.id]=element;
+            }
+            
+            
+          });
+          
         }
+        
       )
+      console.log(this.tasks)
     },
     async addTask() {
       if (this.newTask.trim() !== '') {
@@ -119,7 +129,8 @@ export default {
         );
       
         const defaultIcon = 'fa-check-circle'; 
-        this.tasks.push({ id: this.tasks.length + 1, name: this.newTask, icon: defaultIcon, editing: false });
+        // this.tasks.push({ id: this.tasks.length +1, name: this.newTask, icon: defaultIcon, editing: false });
+        this.tasks[this.tasks.length +1] = { id: this.tasks.length +1, name: this.newTask, icon: defaultIcon, editing: false }
         this.newTask = '';
         this.showAddModal=false;
         
