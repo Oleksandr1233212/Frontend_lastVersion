@@ -108,10 +108,10 @@ export default {
     },
     async addTask() {
       if (this.newTask.trim() !== '') {
-        let newData = this.tasks.value;
+        let newData = this.newTask;
         const formData = new FormData()
         formData.append('newData', newData);
-        axios.post(API_URL+"api/tasknanagerapp/del?id="+id, formData).then(
+        axios.post(API_URL+"api/tasknanagerapp/add?id="+this.currentTaskIndex, formData).then(
           (response)=>{
             this.refreshData();
             alert(response.data);
@@ -163,12 +163,26 @@ export default {
       this.showEditModal = true;
     },
     async finishEdit() {
+      
+      this.tasks[this.currentTaskIndex-1].title = this.editedTaskName;
+      
+      this.tasks.editing = false;
+      
       if (this.currentTask) {
+        let newData=this.tasks[this.currentTaskIndex-1].title;
+        
+        const formData=new FormData();
+        formData.append('newData', newData);
+        axios.post(API_URL+"api/tasknanagerapp/upd?id="+this.currentTaskIndex, formData).then(
+          (response)=>{
+            this.refreshData();
+            alert(response.data);
+          }
+        );
 
-        this.tasks[this.currentTaskIndex].title = this.editedTaskName;
-        this.tasks[this.currentTaskIndex].editing = false;
+        
         this.closeModals();
-        localStorage.setItem('tasks', JSON.stringify(this.tasks));
+        
       }
     }
   },
