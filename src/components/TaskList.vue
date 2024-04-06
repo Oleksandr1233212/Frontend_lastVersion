@@ -7,6 +7,9 @@
       
                   <div class="form-group">
     <div class="row">
+      <div class="col-sm-4">
+          <input type="text" v-model="newAuthor" class="form-control" placeholder="Введіть автора">
+        </div>
         <div class="col-sm-8">
           <input type="text" v-model="newTask"  class="form-control" placeholder="Введіть назву завдання">
         </div>
@@ -82,6 +85,7 @@ export default {
   data() {
     return {
       newTask: '',
+      newAuthor: '',
       tasks: [],
       
       showEditModal: false,
@@ -117,8 +121,17 @@ export default {
       console.log(this.tasks)
     },
     async addTask() {
+      const defaultIcon = 'fa-check-circle';
+        const currentDate = new Date().toLocaleDateString(); 
+        const newTask = {
+          name: this.newTask,
+          author: this.newAuthor,
+          createdAt: currentDate,
+          icon: defaultIcon,
+          editing: false
+        };
       if (this.newTask.trim() !== '') {
-        let newData = this.newTask;
+        let newData = newTask;
         const formData = new FormData()
         formData.append('newData', newData);
         axios.post(API_URL+"api/tasknanagerapp/add?id="+this.currentTaskIndex, formData).then(
@@ -128,11 +141,7 @@ export default {
           }
         );
       
-        const defaultIcon = 'fa-check-circle'; 
-        // this.tasks.push({ id: this.tasks.length +1, name: this.newTask, icon: defaultIcon, editing: false });
-        this.tasks[this.tasks.length +1] = { id: this.tasks.length +1, name: this.newTask, icon: defaultIcon, editing: false }
-        this.newTask = '';
-        this.showAddModal=false;
+        
         
       }
     },
@@ -175,12 +184,20 @@ export default {
     },
     async finishEdit() {
       
-      this.tasks[this.currentTaskIndex-1].title = this.editedTaskName;
-      
-      this.tasks.editing = false;
+      this.tasks[this.currentTaskIndex].name = this.editedTaskName; 
+      this.tasks[this.currentTaskIndex].author = this.editedTaskAuthor; 
+
       
       if (this.currentTask) {
-        let newData=this.tasks[this.currentTaskIndex-1].title;
+        const updatedTask = {
+          id: this.currentTask.id,
+          name: this.editedTaskName,
+          author: this.editedTaskAuthor,
+          createdAt: this.currentTask.createdAt 
+        };
+      }
+      if (this.currentTask) {
+        let newData=this.updatedTask[this.currentTaskIndex-1];
         
         const formData=new FormData();
         formData.append('newData', newData);
@@ -192,9 +209,10 @@ export default {
         );
 
         
-        this.closeModals();
+        
         
       }
+      this.closeModals();
     }
   },
   
