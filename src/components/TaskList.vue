@@ -5,17 +5,30 @@
         <h2 class="mb-4 text-center">Таск Менеджер</h2>
         <div class="form-group">
           <div class="row justify-content-center">
-            <div class="col-sm-3">
+            <div class="col-sm-2">
               <input type="text" v-model="taskForm.newAuthor" class="form-control" placeholder="Автор">
             </div>
-            <div class="col-sm-3">
+            <div class="col-sm-2">
               <input type="text" v-model="taskForm.newTask" class="form-control" placeholder="Нова задача">
             </div>
-            <div class="col-sm-3">
+            <div class="col-sm-2">
               <input type="date" v-model="taskForm.taskDate" class="form-control">
             </div>
-            <div class="col-sm-3">
-              <button type="button" class="btn btn-primary btn-block" @click="addTask">Додати</button>
+            <div class="col-sm-2">
+              <select v-model="taskForm.category" class="form-control">
+                <p>dasdas</p>
+                <option disabled value="">Оберіть категорію</option>
+                <option>Робота</option>
+                <option>Особисте</option>
+                <option>Навчання</option>
+                <option>Домашні завдання</option>
+                <option>Фітнес</option>
+                <option>Хобі</option>
+                <option>Інше</option>
+              </select>
+            </div>
+            <div class="col-sm-2">
+              <button type="button" class="btn btn-primary" @click="addTask">Додати</button>
             </div>
           </div>
         </div>
@@ -23,7 +36,12 @@
     </div>
     <ul class="list-group mt-3" style="max-width: 800px; margin: auto;">
       <li v-for="(task, index) in tasks" :key="task.id" class="list-group-item d-flex justify-content-between align-items-center">
-        <div><span style="font-weight: bold; color:red">{{ task.name }}</span> від  <span style="font-weight: bold; color:green">  {{ task.author }}</span>, <b>{{ task.data }}</b></div>
+        <div>
+          <span style="font-weight: bold; color: red">{{ task.name }}</span> від 
+          <span style="font-weight: bold; color: green">{{ task.author }}</span>,
+          <b>{{ task.data }}</b>, 
+          <i>{{ task.category }}</i>
+        </div>
         <div>
           <button @click="editTask(task)" class="btn btn-primary btn-sm" style="margin-right: 10px;">Редагувати</button>
           <button @click="confirmDelete(task.id)" class="btn btn-danger btn-sm">Видалити</button>
@@ -34,6 +52,7 @@
     <confirm-delete-modal v-if="showConfirmModal" @close="closeModals" @confirm="deleteTask"></confirm-delete-modal>
   </div>
 </template>
+
 
 
 
@@ -55,6 +74,8 @@ export default {
       taskForm: {
         newTask: '',
         newAuthor: '',
+        data:'',
+        category:''
       },
       tasks: [],
       showEditModal: false,
