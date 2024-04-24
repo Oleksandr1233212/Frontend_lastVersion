@@ -16,6 +16,20 @@
                 <label for="taskAuthor">Автор</label>
                 <input type="text" id="taskAuthor" v-model="task.author" class="form-control">
               </div>
+              <div class="form-group">
+                <label for="taskAuthor">Категорія</label>
+                <select v-model="task.category" class="form-control">
+                <p>dasdas</p>
+                <option disabled value="">Оберіть категорію</option>
+                <option>Робота</option>
+                <option>Особисте</option>
+                <option>Навчання</option>
+                <option>Домашні завдання</option>
+                <option>Фітнес</option>
+                <option>Хобі</option>
+                <option>Інше</option>
+              </select>
+              </div>
               <button type="submit" class="btn btn-primary">Зберегти</button>
             </form>
           </div>

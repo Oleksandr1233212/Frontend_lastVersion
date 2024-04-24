@@ -103,10 +103,11 @@ export default {
         const formData = new FormData();
         formData.append('name', this.taskForm.newTask);
         formData.append('author', this.taskForm.newAuthor);
-        formData.append('createdAt', new Date().toLocaleDateString());
+        formData.append('createdAt', this.taskForm.taskDate);
+        formData.append('category', this.taskForm.category);
         await axios.post(API_URL + "add", formData);
         this.refreshData();
-        this.taskForm = { newTask: '', newAuthor: '' }; // Reset form
+        this.taskForm = { newTask: '', newAuthor: '', taskDate: '', category: ''}; // Reset form
       } catch (error) {
         console.error("Add task error:", error);
       }
@@ -133,7 +134,8 @@ export default {
         const formData = new FormData();
         formData.append('name', updatedTask.name);
         formData.append('author', updatedTask.author);
-        formData.append('createdAt', new Date().toLocaleDateString());
+        formData.append('createdAt', updatedTask.taskDate);
+        formData.append('category', updatedTask.category);
         await axios.post(API_URL + "upd?id=" + updatedTask.id, formData);
         this.refreshData();
       } catch (error) {

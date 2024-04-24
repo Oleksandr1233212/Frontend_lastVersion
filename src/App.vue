@@ -1,10 +1,8 @@
 <script setup>
 
-import TaskList from './components/TaskList.vue'
-
-//import TaskList from './components/TSList.vue'
-//import TaskList from './components/dz.vue'
-//import TaskList from './components/TaskListVueTemplate.vue'
+//import TaskList from './components/TaskList.vue'
+//import TaskLast from './components/Auth.vue'
+import TaskLast from './components/Details.vue'
 
 
 
@@ -12,7 +10,7 @@ import TaskList from './components/TaskList.vue'
 
 <template>
   <header>
-    
+    <TaskLast />
     
 
   
@@ -32,8 +30,12 @@ import TaskList from './components/TaskList.vue'
 
 body {
   position: absolute;
-  top: 200px; left: 300px;
+  top: 100px; left: 300px;
   
+}
+header {
+  position: absolute;
+  top:550px; left: 550px;
 }
 
 
