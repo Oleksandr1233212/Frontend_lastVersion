@@ -1,8 +1,6 @@
 <script setup>
 
-//import TaskList from './components/TaskList.vue'
-//import TaskLast from './components/Auth.vue'
-import TaskLast from './components/Details.vue'
+
 
 
 
@@ -10,7 +8,7 @@ import TaskLast from './components/Details.vue'
 
 <template>
   <header>
-    <TaskLast />
+
     
 
   
@@ -18,7 +16,7 @@ import TaskLast from './components/Details.vue'
   
 
   <body id="app">
-    <TaskList />
+    <router-view/>
     
   </body>
 </template>
@@ -28,15 +26,7 @@ import TaskLast from './components/Details.vue'
 
 
 
-body {
-  position: absolute;
-  top: 100px; left: 300px;
-  
-}
-header {
-  position: absolute;
-  top:550px; left: 550px;
-}
+
 
 
 

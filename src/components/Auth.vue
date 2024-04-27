@@ -21,7 +21,7 @@
                   <input type="password" class="form-control" v-model="registerData.password" placeholder="Пароль" required>
                 </div>
                 <div class="text-center">
-                <button type="submit" class="btn btn-primary btn-block">Реєстрація</button>
+                  <router-link :to="`/TaskList`"><button class="btn btn-info btn-sm">Реєстрація</button></router-link>
                 </div>
               </form>
             </div>
@@ -36,7 +36,7 @@
                   <input type="password" class="form-control" v-model="loginData.password" placeholder="Пароль" required>
                 </div>
                 <div class="text-center">
-                <button type="submit" class="btn btn-primary btn-block">Вхід</button>
+                  <router-link :to="`/TaskList`"><button class="btn btn-info btn-sm">Вхід</button></router-link>
                 </div>
                 
               </form>
@@ -82,7 +82,7 @@
   
   <style scoped>
   .auth-container {
-    margin-top: -400px;
+    margin-top: -150px;
     
   }
   

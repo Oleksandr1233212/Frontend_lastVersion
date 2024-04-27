@@ -45,6 +45,7 @@
         <div>
           <button @click="editTask(task)" class="btn btn-primary btn-sm" style="margin-right: 10px;">Редагувати</button>
           <button @click="confirmDelete(task.id)" class="btn btn-danger btn-sm">Видалити</button>
+          <router-link :to="`/tasks/${task.id}`"><button class="btn btn-info btn-sm">info</button></router-link>
         </div>
       </li>
     </ul>
