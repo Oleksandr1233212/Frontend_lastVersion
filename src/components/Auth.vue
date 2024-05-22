@@ -12,7 +12,7 @@
               <form @submit.prevent="register">
                 <!-- Реєстраційні поля -->
                 <div class="form-group mb-3">
-                  <input type="text" class="form-control" v-model="registerData.username" placeholder="Ім'я користувача" required>
+                  <input type="text" class="form-control" v-model="this.registerData.username" placeholder="Ім'я користувача" required>
                 </div>
                 <div class="form-group mb-3">
                   <input type="email" class="form-control" v-model="registerData.email" placeholder="Електронна пошта" required>
@@ -21,7 +21,7 @@
                   <input type="password" class="form-control" v-model="registerData.password" placeholder="Пароль" required>
                 </div>
                 <div class="text-center">
-                  <router-link :to="`/TaskList`"><button class="btn btn-info btn-sm">Реєстрація</button></router-link>
+                  <router-link :to="`/TaskList`"><button class="btn btn-info btn-sm" @click="register()">Реєстрація</button></router-link>
                 </div>
               </form>
             </div>
@@ -52,6 +52,7 @@
   
   
   <script>
+  const API_URL = "http://localhost:5031/api/tasknanagerapp/";
   export default {
     data() {
       return {
@@ -69,8 +70,20 @@
     },
     methods: {
       register() {
-        // Логіка реєстрації користувача
-        console.log('Реєстрація');
+        if(!this.registerData.username || !this.registerData.email || !this.registerData.password) return
+        try{
+          console.log(this.registerData.username)
+          const formData = new FormData()
+          formData.append('username', this.registerData.username)
+          formData.append('email', this.registerData.email)
+          formData.append('password', this.registerData.password)
+          axios.post(API_URL + "register", formData);
+          this.registerData={username: '',email: '',password: ''}
+
+        }catch(error){
+          console.error("Add task error:", error);
+
+        }
       },
       login() {
         // Логіка входу користувача
