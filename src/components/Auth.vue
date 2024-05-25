@@ -12,7 +12,7 @@
               <form @submit.prevent="register">
                 <!-- Реєстраційні поля -->
                 <div class="form-group mb-3">
-                  <input type="text" class="form-control" v-model="this.registerData.username" placeholder="Ім'я користувача" required>
+                  <input type="text" class="form-control" v-model="registerData.username" placeholder="Ім'я користувача" required>
                 </div>
                 <div class="form-group mb-3">
                   <input type="email" class="form-control" v-model="registerData.email" placeholder="Електронна пошта" required>
@@ -33,10 +33,14 @@
                   <input type="text" class="form-control" v-model="loginData.username" placeholder="Ім'я користувача" required>
                 </div>
                 <div class="form-group mb-3">
+                  <input type="email" class="form-control" v-model="loginData.email" placeholder="Електронна пошта" required>
+                </div>
+                <div class="form-group mb-3">
                   <input type="password" class="form-control" v-model="loginData.password" placeholder="Пароль" required>
                 </div>
+                
                 <div class="text-center">
-                  <router-link :to="`/TaskList`"><button class="btn btn-info btn-sm">Вхід</button></router-link>
+                  <router-link :to="`/TaskList`"><button class="btn btn-info btn-sm" @click="login()">Вхід</button></router-link>
                 </div>
                 
               </form>
@@ -64,7 +68,8 @@
         },
         loginData: {
           username: '',
-          password: ''
+          password: '',
+          email: ''
         }
       };
     },
@@ -72,7 +77,7 @@
       register() {
         if(!this.registerData.username || !this.registerData.email || !this.registerData.password) return
         try{
-          console.log(this.registerData.username)
+          
           const formData = new FormData()
           formData.append('username', this.registerData.username)
           formData.append('email', this.registerData.email)
@@ -86,8 +91,20 @@
         }
       },
       login() {
-        // Логіка входу користувача
-        console.log('Вхід');
+        if(!this.loginData.username || !this.loginData.email || !this.loginData.password) return
+        try{
+         
+          const formData = new FormData()
+          formData.append('username', this.loginData.username)
+          formData.append('email', this.loginData.email)
+          formData.append('password', this.loginData.password)
+          axios.post(API_URL + "login", formData);
+          this.loginData={username: '',email: '',password: ''}
+
+        }catch(error){
+          console.error("Add task error:", error);
+
+        }
       }
     }
   };

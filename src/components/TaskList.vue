@@ -97,7 +97,8 @@ export default {
         edited:false,
         completed:false,
         timeAdded:'',
-        timeComplited:''
+        timeComplited:'',
+        userId:''
 
       },
       tasks: [],
