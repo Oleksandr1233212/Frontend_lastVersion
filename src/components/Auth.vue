@@ -21,7 +21,7 @@
                   <input type="password" class="form-control" v-model="registerData.password" placeholder="Пароль" required>
                 </div>
                 <div class="text-center">
-                  <router-link :to="`/TaskList`"><button class="btn btn-info btn-sm" @click="register()">Реєстрація</button></router-link>
+                  <button class="btn btn-info btn-sm" @click="register()">Реєстрація</button>
                 </div>
               </form>
             </div>
@@ -40,7 +40,7 @@
                 </div>
                 
                 <div class="text-center">
-                  <router-link :to="`/TaskList`"><button class="btn btn-info btn-sm" @click="login()">Вхід</button></router-link>
+                  <button class="btn btn-info btn-sm" @click="login()">Вхід</button>
                 </div>
                 
               </form>
@@ -56,61 +56,76 @@
   
   
   <script>
-  const API_URL = "http://localhost:5031/api/tasknanagerapp/";
-  export default {
-    data() {
-      return {
-        activeTab: 'register', // За замовчуванням вибрана вкладка "Реєстрація"
-        registerData: {
-          username: '',
-          email: '',
-          password: ''
-        },
-        loginData: {
-          username: '',
-          password: '',
-          email: ''
-        }
-      };
-    },
-    methods: {
-      register() {
-        if(!this.registerData.username || !this.registerData.email || !this.registerData.password) return
-        try{
-          
-          const formData = new FormData()
-          formData.append('username', this.registerData.username)
-          formData.append('email', this.registerData.email)
-          formData.append('password', this.registerData.password)
-          axios.post(API_URL + "register", formData);
-          this.registerData={username: '',email: '',password: ''}
 
-        }catch(error){
-          console.error("Add task error:", error);
 
-        }
+
+const API_URL = "http://localhost:5031/api/tasknanagerapp/";
+
+export default {
+  data() {
+    return {
+      activeTab: 'register', // За замовчуванням вибрана вкладка "Реєстрація"
+      registerData: {
+        username: '',
+        email: '',
+        password: '',
       },
-      login() {
-        if(!this.loginData.username || !this.loginData.email || !this.loginData.password) return
-        try{
-         
-          const formData = new FormData()
-          formData.append('username', this.loginData.username)
-          formData.append('email', this.loginData.email)
-          formData.append('password', this.loginData.password)
-          axios.post(API_URL + "login", formData);
-          this.loginData={username: '',email: '',password: ''}
+      loginData: {
+        username: '',
+        password: '',
+        email: ''
+      }
+    };
+  },
+  methods: {
+    async register() {
+      if (!this.registerData.username || !this.registerData.email || !this.registerData.password) return;
 
-        }catch(error){
-          console.error("Add task error:", error);
+      try {
+        const formData = new FormData();
+        formData.append('username', this.registerData.username);
+        formData.append('email', this.registerData.email);
+        formData.append('password', this.registerData.password);
 
+        const response = await axios.post(API_URL + "register", formData);
+        if(response.data.userId){
+          localStorage.setItem('userId', JSON.stringify(response.data.userId))
+          this.$router.push('/TaskList');
         }
+      
+        
+        this.registerData = { username: '', email: '', password: '' };
+      } catch (error) {
+        console.error("Registration error:", error);
+      }
+    },
+    login() {
+      if (!this.loginData.username || !this.loginData.email || !this.loginData.password) return;
+
+      try {
+        const formData = new FormData();
+        formData.append('username', this.loginData.username);
+        formData.append('email', this.loginData.email);
+        formData.append('password', this.loginData.password);
+
+        const response = axios.post(API_URL + "login", formData);
+        
+        if (response.data.userId) {
+          localStorage.setItem('userId', response.data.userId);
+          this.$router.push('/TaskList');
+        }
+        
+        this.loginData = { username: '', email: '', password: '' };
+      } catch (error) {
+        console.error("Login error:", error);
       }
     }
-  };
-  </script>
+  }
+};
   
-  <style scoped>
+</script>
+  
+<style scoped>
   .auth-container {
     margin-top: -150px;
     
