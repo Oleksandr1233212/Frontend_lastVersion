@@ -114,12 +114,11 @@ export default {
   methods: {
     async refreshData() {
       try {
-        console.log(localStorage.getItem('userId'))
-        userId=localStorage.getItem('userId')
+
         
         const formData=new FormData()
-        formData.append('userId', userId)
-        const response = await axios.get(API_URL + "get", formData);
+        formData.append('userId', localStorage.getItem('userId'))
+        const response = await axios.post(API_URL + "user", formData);
         console.log(response.data);
         this.tasks = response.data;
       } catch (error) {
@@ -131,7 +130,7 @@ export default {
       try {
         this.taskForm.timeAdded= new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
         this.taskForm.edited=false
-        userId=localStorage.getItem('userId')
+     
         const formData = new FormData();
         formData.append('name', this.taskForm.newTask);
         formData.append('author', this.taskForm.newAuthor);
@@ -141,7 +140,7 @@ export default {
         formData.append('completed',this.taskForm.completed)
         formData.append('timeAdded',this.taskForm.timeAdded)
         formData.append('timeComplited',this.taskForm.timeComplited)
-        formData.append('userId',userId)
+        formData.append('userId',localStorage.getItem('userId'))
         await axios.post(API_URL + "add", formData);
         this.refreshData();
         this.taskForm = { newTask: '', newAuthor: '', taskDate: '', category: '',edited:'',completed:'',timeAdded:'',timeComplited:''}; // Reset form

@@ -99,7 +99,7 @@ export default {
         console.error("Registration error:", error);
       }
     },
-    login() {
+    async login() {
       if (!this.loginData.username || !this.loginData.email || !this.loginData.password) return;
 
       try {
@@ -107,8 +107,9 @@ export default {
         formData.append('username', this.loginData.username);
         formData.append('email', this.loginData.email);
         formData.append('password', this.loginData.password);
+        console.log(this.loginData.password)
 
-        const response = axios.post(API_URL + "login", formData);
+        const response = await axios.post(API_URL + "login", formData);
         
         if (response.data.userId) {
           localStorage.setItem('userId', response.data.userId);
