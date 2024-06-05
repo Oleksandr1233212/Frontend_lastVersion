@@ -9,13 +9,14 @@
             </div>
             <div v-if="activeTab === 'register'">
               <h2>Реєстрація</h2>
-              <form @submit.prevent="register">
-                <!-- Реєстраційні поля -->
+              <Form @submit.prevent="register">
+                
                 <div class="form-group mb-3">
                   <input type="text" class="form-control" v-model="registerData.username" placeholder="Ім'я користувача" required>
                 </div>
                 <div class="form-group mb-3">
-                  <input type="email" class="form-control" v-model="registerData.email" placeholder="Електронна пошта" required>
+                  <Field type="email" name='email' class="form-control" :rules="validateEmail" v-model="registerData.email" placeholder="Електронна пошта" required />
+                  <ErrorMessage name="email" />
                 </div>
                 <div class="form-group mb-3">
                   <input type="password" class="form-control" v-model="registerData.password" placeholder="Пароль" required>
@@ -23,17 +24,18 @@
                 <div class="text-center">
                   <button class="btn btn-info btn-sm" @click="register()">Реєстрація</button>
                 </div>
-              </form>
+              </Form>
             </div>
             <div v-if="activeTab === 'login'">
               <h2>Вхід</h2>
-              <form @submit.prevent="login">
-                <!-- Поля для входу -->
+              <Form @submit.prevent="login">
+                
                 <div class="form-group mb-3">
                   <input type="text" class="form-control" v-model="loginData.username" placeholder="Ім'я користувача" required>
                 </div>
                 <div class="form-group mb-3">
-                  <input type="email" class="form-control" v-model="loginData.email" placeholder="Електронна пошта" required>
+                  <Field type="email" name="login" class="form-control" :rules="validateEmail" v-model="loginData.email" placeholder="Електронна пошта" required/>
+                  <ErrorMessage name="login" />
                 </div>
                 <div class="form-group mb-3">
                   <input type="password" class="form-control" v-model="loginData.password" placeholder="Пароль" required>
@@ -43,9 +45,9 @@
                   <button class="btn btn-info btn-sm" @click="login()">Вхід</button>
                 </div>
                 
-              </form>
+              </Form>
             </div>
-            <!-- Кнопка внизу -->
+            
             
           </div>
         </div>
@@ -58,13 +60,14 @@
   <script>
 
 
-
+import { Form, Field, ErrorMessage } from 'vee-validate';
 const API_URL = "http://localhost:5031/api/tasknanagerapp/";
 
 export default {
   data() {
     return {
-      activeTab: 'register', // За замовчуванням вибрана вкладка "Реєстрація"
+      activeTab: 'register', 
+      validation: false,
       registerData: {
         username: '',
         email: '',
@@ -78,10 +81,27 @@ export default {
     };
   },
   methods: {
+    validateEmail(value) {
+      // if the field is empty
+      if (!value) {
+        
+        return 'This field is required';
+      }
+      // if the field is not a valid email
+      const regex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i;
+      if (!regex.test(value)) {
+        
+        return 'This field must be a valid email';
+      }
+      // All is good
+      this.validation=true
+      return true;
+      
+    },
     async register() {
       if (!this.registerData.username || !this.registerData.email || !this.registerData.password) return;
-
-      try {
+      if(this.validation){
+        try {
         const formData = new FormData();
         formData.append('username', this.registerData.username);
         formData.append('email', this.registerData.email);
@@ -98,11 +118,15 @@ export default {
       } catch (error) {
         console.error("Registration error:", error);
       }
+
+      }
+
+      
     },
     async login() {
       if (!this.loginData.username || !this.loginData.email || !this.loginData.password) return;
-
-      try {
+      if(this.validation){
+        try {
         const formData = new FormData();
         formData.append('username', this.loginData.username);
         formData.append('email', this.loginData.email);
@@ -120,8 +144,18 @@ export default {
       } catch (error) {
         console.error("Login error:", error);
       }
-    }
-  }
+
+      }
+
+      
+    },
+    
+  },
+  components: {
+    Form,
+    Field,
+    ErrorMessage
+  },
 };
   
 </script>
@@ -139,7 +173,7 @@ export default {
   margin-left: 170px;
 }
 .text-center button {
-  margin-left: 5px; /* Зміщення кнопки внизу вліво */
+  margin-left: 5px; 
 }
   
   .auth-tabs button {
