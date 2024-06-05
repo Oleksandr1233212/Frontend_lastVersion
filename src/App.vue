@@ -1,10 +1,6 @@
 <script setup>
 
-import TaskList from './components/TaskList.vue'
 
-//import TaskList from './components/TSList.vue'
-//import TaskList from './components/dz.vue'
-//import TaskList from './components/TaskListVueTemplate.vue'
 
 
 
@@ -12,7 +8,7 @@ import TaskList from './components/TaskList.vue'
 
 <template>
   <header>
-    
+
     
 
   
@@ -20,7 +16,7 @@ import TaskList from './components/TaskList.vue'
   
 
   <body id="app">
-    <TaskList />
+    <router-view/>
     
   </body>
 </template>
@@ -30,11 +26,7 @@ import TaskList from './components/TaskList.vue'
 
 
 
-body {
-  position: absolute;
-  top: 200px; left: 300px;
-  
-}
+
 
 
 
